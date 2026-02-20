@@ -1,0 +1,18 @@
+[
+  {
+    "ContainingType": "Cafeteria.Backend.Controllers.UsuarioController",
+    "Method": "IniciarSesion",
+    "RelativePath": "api/Usuario/iniciarSesion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Cafeteria.Backend.Dtos.UsuarioDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
