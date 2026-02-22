@@ -1,14 +1,17 @@
 import { Routes } from '@angular/router';
-import { Menu } from './components/cliente/menu/menu';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'menu',
-    pathMatch: 'full'
+    loadComponent: () =>
+      import('./components/cliente/bienvenida/bienvenida').then((m) => m.Bienvenida),
   },
   {
     path: 'menu',
-    component: Menu
-  }
+    loadComponent: () => import('./components/cliente/menu/menu').then((m) => m.Menu),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./components/cliente/auth/login/login').then((m) => m.Login),
+  },
 ];

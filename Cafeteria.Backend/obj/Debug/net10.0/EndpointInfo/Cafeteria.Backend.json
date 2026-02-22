@@ -22,6 +22,38 @@
           "content": {
             "application/json": {
               "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Usuario/registrar": {
+      "post": {
+        "tags": [
+          "Usuario"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "$ref": "#/components/schemas/UsuarioDto"
               }
             },
@@ -48,6 +80,17 @@
   },
   "components": {
     "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "correo": {
+            "type": "string"
+          },
+          "clave": {
+            "type": "string"
+          }
+        }
+      },
       "UsuarioDto": {
         "type": "object",
         "properties": {
@@ -74,7 +117,7 @@
           "esActivo": {
             "type": "boolean"
           },
-          "idRol": {
+          "rolId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "integer",

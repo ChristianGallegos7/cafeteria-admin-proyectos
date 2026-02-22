@@ -9,6 +9,22 @@
     "Parameters": [
       {
         "Name": "dto",
+        "Type": "Cafeteria.Backend.Dtos.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Cafeteria.Backend.Controllers.UsuarioController",
+    "Method": "CrearUsuario",
+    "RelativePath": "api/Usuario/registrar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioDto",
         "Type": "Cafeteria.Backend.Dtos.UsuarioDto",
         "IsRequired": true
       }

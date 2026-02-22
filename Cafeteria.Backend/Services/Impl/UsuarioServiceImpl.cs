@@ -27,7 +27,7 @@ namespace Cafeteria.Backend.Services.Impl
                     Apellido = dto.Apellido,
                     Correo = dto.Correo,
                     Clave = BCrypt.Net.BCrypt.HashPassword(dto.Clave),
-                    IdRol = dto.IdRol,
+                    RolId = dto.RolId,
                     EsActivo = true
                 };
 
@@ -45,7 +45,7 @@ namespace Cafeteria.Backend.Services.Impl
                     Apellido = usuarioCreado.Apellido,
                     Correo = usuarioCreado.Correo,
                     EsActivo = usuarioCreado.EsActivo,
-                    IdRol = usuarioCreado.IdRol,
+                    RolId = usuarioCreado.RolId,
                 };
             }
             catch (Exception)
@@ -92,7 +92,7 @@ namespace Cafeteria.Backend.Services.Impl
                 }
 
                 var nombreRol = usuario.Rol?.Nombre ?? string.Empty;
-                var token = await _generateToken.GenerarToken(usuario.Id, usuario.Correo, usuario.IdRol, nombreRol);
+                var token = await _generateToken.GenerarToken(usuario.Id, usuario.Correo, usuario.RolId, nombreRol);
 
                 return new UsuarioDto
                 {
@@ -100,7 +100,7 @@ namespace Cafeteria.Backend.Services.Impl
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
                     Correo = usuario.Correo,
-                    IdRol = usuario.IdRol,
+                    RolId = usuario.RolId,
                     EsActivo = usuario.EsActivo,
                     NombreRol = nombreRol,
                     Token = token
@@ -129,7 +129,7 @@ namespace Cafeteria.Backend.Services.Impl
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
                     Correo = usuario.Correo,
-                    IdRol = usuario.IdRol,
+                    RolId = usuario.RolId,
                     EsActivo = usuario.EsActivo
                 };
             }
@@ -156,7 +156,7 @@ namespace Cafeteria.Backend.Services.Impl
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
                     Correo = usuario.Correo,
-                    IdRol = usuario.IdRol,
+                    RolId = usuario.RolId,
                     EsActivo = usuario.EsActivo
                 };
             }
@@ -179,7 +179,7 @@ namespace Cafeteria.Backend.Services.Impl
                     Nombre = u.Nombre,
                     Apellido = u.Apellido,
                     Correo = u.Correo,
-                    IdRol = u.IdRol,
+                    RolId = u.RolId,
                     EsActivo = u.EsActivo
                 });
             }

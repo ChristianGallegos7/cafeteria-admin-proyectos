@@ -14,7 +14,7 @@
 
         public bool EsActivo { get; set; }
 
-        public int IdRol { get; set; }
+        public int RolId { get; set; }
 
         public Rol Rol { get; set; }
     }

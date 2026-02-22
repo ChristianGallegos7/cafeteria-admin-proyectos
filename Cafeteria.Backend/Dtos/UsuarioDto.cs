@@ -18,7 +18,7 @@ namespace Cafeteria.Backend.Dtos
         public bool EsActivo { get; set; }
 
         // Solo el ID para vincular el Rol
-        public int IdRol { get; set; }
+        public int RolId { get; set; }
 
         // Opcional: Solo el nombre del rol para mostrarlo en el frontend
         public string? NombreRol { get; set; }

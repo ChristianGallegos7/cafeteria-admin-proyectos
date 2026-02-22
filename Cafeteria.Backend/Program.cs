@@ -1,5 +1,6 @@
 using System.Text;
 using Cafeteria.Backend.Data;
+using Cafeteria.Backend.Models;
 using Cafeteria.Backend.Repositorios;
 using Cafeteria.Backend.Repositorios.Impl;
 using Cafeteria.Backend.Services;
@@ -64,14 +65,45 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
+// Seed de datos iniciales
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<CafeteriaDbContext>();
+    context.Database.Migrate();
+
+    if (!context.Roles.Any())
+    {
+        var rolAdmin = new Rol
+        {
+            Nombre = "Administrador",
+            Descripcion = "Rol con acceso total al sistema",
+            EsActivo = true
+        };
+        context.Roles.Add(rolAdmin);
+        context.SaveChanges();
+
+        var admin = new Usuario
+        {
+            Nombre = "Admin",
+            Apellido = "Sistema",
+            Correo = "admin@cafeteria.com",
+            Clave = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+            EsActivo = true,
+            RolId = rolAdmin.Id
+        };
+        context.Usuarios.Add(admin);
+        context.SaveChanges();
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
