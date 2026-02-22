@@ -15,7 +15,7 @@ namespace Cafeteria.Backend.Repositorios.Impl
 
         public async Task<Usuario> CrearUsuario(Usuario usuario)
         {
-            _context.Usuarios.Add(usuario);
+           await _context.Usuarios.AddAsync(usuario);
             return await _context.SaveChangesAsync() > 0 ? usuario : null;
         }
 

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Cafeteria.Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f9c134e4642f6bfab8c0f1c174f24d63ec06a21")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f44ddf1b6ca1a436ab3de978e1d3cb9948bf2907")]
 [assembly: System.Reflection.AssemblyProductAttribute("Cafeteria.Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Cafeteria.Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
