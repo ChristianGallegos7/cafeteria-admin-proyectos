@@ -1,8 +1,183 @@
-<div class="h-screen">
-  <client-navbar />
-  <main>
-    <div class="flex items-center justify-center h-full">
-      <h1 class="text-4xl font-bold text-gray-800">Welcome to the Client Menu</h1>
+<!-- Modal Tipo de Pedido (Obligatorio) -->
+@if (mostrarModal) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Overlay oscuro -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+    <!-- Modal -->
+    <div class="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden animate-fade-in">
+      <!-- Header con imagen -->
+      <div class="bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800 px-8 py-10 text-center">
+        <svg class="w-20 h-20 text-amber-100 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M2 21V19H20V21H2ZM20 8V5H22V8C22 9.1 21.1 10 20 10V8ZM18 8H4V13C4 14.66 5.34 16 7 16H15C16.66 16 18 14.66 18 13V8ZM20 3H2V7H20V3Z"/>
+        </svg>
+        <h2 class="text-3xl font-bold text-white mb-2">Bienvenido</h2>
+        <p class="text-amber-200">¿Como deseas tu pedido?</p>
+      </div>
+
+      <!-- Opciones -->
+      <div class="p-8">
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Opcion: Comer aqui -->
+          <button
+            (click)="seleccionarTipoPedido('aqui')"
+            class="group flex flex-col items-center p-6 rounded-2xl border-2 border-amber-200
+                   hover:border-amber-500 hover:bg-amber-50 transition-all duration-200"
+          >
+            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4
+                        group-hover:bg-amber-500 group-hover:scale-110 transition-all duration-200">
+              <svg class="w-8 h-8 text-amber-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+              </svg>
+            </div>
+            <span class="text-lg font-semibold text-amber-900">Comer aqui</span>
+            <span class="text-sm text-amber-600 mt-1">Disfruta en nuestro local</span>
+          </button>
+
+          <!-- Opcion: Para llevar -->
+          <button
+            (click)="seleccionarTipoPedido('llevar')"
+            class="group flex flex-col items-center p-6 rounded-2xl border-2 border-amber-200
+                   hover:border-amber-500 hover:bg-amber-50 transition-all duration-200"
+          >
+            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4
+                        group-hover:bg-amber-500 group-hover:scale-110 transition-all duration-200">
+              <svg class="w-8 h-8 text-amber-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+              </svg>
+            </div>
+            <span class="text-lg font-semibold text-amber-900">Para llevar</span>
+            <span class="text-sm text-amber-600 mt-1">Llevalo a donde quieras</span>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
+}
+
+<div class="min-h-screen bg-amber-50">
+  <client-navbar />
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-amber-900 via-amber-800 to-amber-900 py-12">
+    <div class="max-w-4xl mx-auto text-center px-4">
+      <h1 class="text-4xl md:text-5xl font-bold text-amber-50 mb-3">
+        Nuestra Carta
+      </h1>
+      <p class="text-amber-200 text-lg">
+        Descubre los sabores que hacen de nuestra cafeteria la mejor de Quito
+      </p>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <main class="max-w-7xl mx-auto px-4 py-10">
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      @for (producto of productos; track producto.id) {
+        <article
+          class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl
+                 transition-all duration-300 hover:-translate-y-1 border border-amber-100"
+        >
+          <!-- Image Container -->
+          <div class="relative h-52 overflow-hidden bg-amber-100">
+            @if (producto.imagenUrl) {
+              <img
+                [alt]="producto.nombre"
+                [src]="producto.imagenUrl"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            } @else {
+              <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-amber-100 to-amber-200">
+                <svg class="w-16 h-16 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M2 21V19H20V21H2ZM20 8V5H22V8C22 9.1 21.1 10 20 10V8ZM18 8H4V13C4 14.66 5.34 16 7 16H15C16.66 16 18 14.66 18 13V8ZM20 3H2V7H20V3Z"/>
+                </svg>
+                <span class="text-amber-500 text-sm mt-2 font-medium">Sin imagen</span>
+              </div>
+            }
+
+            <!-- Badge Destacado -->
+            @if (producto.esDestacado) {
+              <div class="absolute top-3 left-3">
+                <span class="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                  Destacado
+                </span>
+              </div>
+            }
+
+            <!-- Categoria Badge -->
+            <div class="absolute top-3 right-3">
+              <span class="bg-white/90 backdrop-blur-sm text-amber-800 text-xs font-semibold px-3 py-1 rounded-full">
+                {{ producto.nombreCategoria }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-xl font-bold text-amber-900 group-hover:text-amber-700 transition-colors">
+                {{ producto.nombre }}
+              </h3>
+            </div>
+
+            <p class="text-amber-700/70 text-sm mb-4 line-clamp-2">
+              {{ producto.descripcion }}
+            </p>
+
+            <div class="flex items-center justify-between pt-3 border-t border-amber-100">
+              <!-- Tiempo preparacion -->
+              <div class="flex items-center gap-1 text-amber-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-xs font-medium">{{ producto.tiempoPreparacion }} min</span>
+              </div>
+
+              <!-- Precio -->
+              <span class="text-2xl font-bold text-amber-800">
+                ${{ producto.precio }}
+              </span>
+            </div>
+
+            <!-- Boton Agregar -->
+            <button
+              class="w-full mt-4 bg-amber-800 hover:bg-amber-900 text-white font-semibold
+                     py-3 px-4 rounded-xl transition-colors duration-200
+                     flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+              Agregar al pedido
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+
+    <!-- Loading State -->
+    @if (cargando) {
+      <div class="text-center py-20">
+        <div class="animate-spin w-16 h-16 border-4 border-amber-300 border-t-amber-600 rounded-full mx-auto mb-4"></div>
+        <h3 class="text-xl font-semibold text-amber-800 mb-2">Cargando menu...</h3>
+        <p class="text-amber-600">Preparando los mejores productos para ti</p>
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (!cargando && productos.length === 0) {
+      <div class="text-center py-20">
+        <svg class="w-24 h-24 text-amber-300 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M2 21V19H20V21H2ZM20 8V5H22V8C22 9.1 21.1 10 20 10V8ZM18 8H4V13C4 14.66 5.34 16 7 16H15C16.66 16 18 14.66 18 13V8ZM20 3H2V7H20V3Z"/>
+        </svg>
+        <h3 class="text-xl font-semibold text-amber-800 mb-2">No hay productos disponibles</h3>
+        <p class="text-amber-600">Vuelve pronto para ver nuestras novedades</p>
+      </div>
+    }
   </main>
 </div>

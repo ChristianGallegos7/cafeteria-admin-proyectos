@@ -1,53 +1,115 @@
-<form
-  action="#"
-  class="mx-auto max-w-md space-y-4 rounded-lg border border-gray-300 bg-gray-100 p-6"
-  (ngSubmit)="enviarFormulario()"
-  [formGroup]="loginForm"
->
-  <div>
-    <label class="block text-sm font-medium text-gray-900" for="correo">Correo:</label>
-
-    <input
-      class="mt-1 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:outline-none"
-      id="correo"
-      type="email"
-      placeholder="xxxx@gmail.com"
-      formControlName="correo"
-    />
-
-    @if (loginForm.get('correo')?.touched && loginForm.get('correo')?.invalid) {
-      <div class="mt-1 text-sm text-red-600">
-        @if (loginForm.get('correo')?.hasError('required')) {
-          El correo es requerido
-        } @else if (loginForm.get('correo')?.hasError('email')) {
-          Ingresa un correo válido
-        }
+<div class="min-h-screen bg-gradient-to-br from-amber-900 via-amber-800 to-amber-900 flex items-center justify-center p-4">
+  <!-- Contenedor principal -->
+  <div class="w-full max-w-md">
+    <!-- Card de login -->
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-amber-700 to-amber-600 px-8 py-10 text-center">
+        <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-12 h-12 text-amber-700" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M2 21V19H20V21H2ZM20 8V5H22V8C22 9.1 21.1 10 20 10V8ZM18 8H4V13C4 14.66 5.34 16 7 16H15C16.66 16 18 14.66 18 13V8ZM20 3H2V7H20V3Z"/>
+          </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-white mb-1">Cafeteria</h1>
+        <p class="text-amber-200 text-sm">Ingresa tus credenciales para continuar</p>
       </div>
-    }
+
+      <!-- Formulario -->
+      <form
+        class="p-8 space-y-6"
+        (ngSubmit)="enviarFormulario()"
+        [formGroup]="loginForm"
+      >
+        <!-- Campo Correo -->
+        <div>
+          <label class="block text-sm font-semibold text-amber-900 mb-2" for="correo">
+            Correo electronico
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+              </svg>
+            </div>
+            <input
+              class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-amber-200
+                     focus:border-amber-500 focus:ring-4 focus:ring-amber-100
+                     transition-all duration-200 outline-none text-amber-900"
+              id="correo"
+              type="email"
+              placeholder="correo@cafeteria.com"
+              formControlName="correo"
+            />
+          </div>
+          @if (loginForm.get('correo')?.touched && loginForm.get('correo')?.invalid) {
+            <div class="mt-2 text-sm text-red-500 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              @if (loginForm.get('correo')?.hasError('required')) {
+                <span>El correo es requerido</span>
+              } @else if (loginForm.get('correo')?.hasError('email')) {
+                <span>Ingresa un correo valido</span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Campo Clave -->
+        <div>
+          <label class="block text-sm font-semibold text-amber-900 mb-2" for="clave">
+            Clave de acceso
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <input
+              class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-amber-200
+                     focus:border-amber-500 focus:ring-4 focus:ring-amber-100
+                     transition-all duration-200 outline-none text-amber-900"
+              id="clave"
+              type="password"
+              placeholder="********"
+              formControlName="clave"
+            />
+          </div>
+          @if (loginForm.get('clave')?.touched && loginForm.get('clave')?.invalid) {
+            <div class="mt-2 text-sm text-red-500 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <span>La clave es requerida</span>
+            </div>
+          }
+        </div>
+
+        <!-- Boton Submit -->
+        <button
+          type="submit"
+          class="w-full bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-800 hover:to-amber-700
+                 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200
+                 transform hover:scale-[1.02] active:scale-[0.98]
+                 flex items-center justify-center gap-3 shadow-lg"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+          </svg>
+          Iniciar Sesion
+        </button>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-6 text-center">
+      <p class="text-amber-200 text-sm">
+        Cafeteria - Quito, Ecuador
+      </p>
+    </div>
   </div>
-
-  <div>
-    <label class="block text-sm font-medium text-gray-900" for="clave">Clave</label>
-
-    <input
-      class="mt-1 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:outline-none"
-      id="clave"
-      type="password"
-      placeholder="Clave *****"
-      formControlName="clave"
-    />
-
-    @if (loginForm.get('clave')?.touched && loginForm.get('clave')?.invalid) {
-      <div class="mt-1 text-sm text-red-600">
-        La clave es requerida
-      </div>
-    }
-  </div>
-
-  <button
-    class="block w-full rounded-lg border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white transition-colors hover:bg-transparent hover:text-indigo-600"
-    type="submit"
-  >
-    LogIn
-  </button>
-</form>
+</div>
