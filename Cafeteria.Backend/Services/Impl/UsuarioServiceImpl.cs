@@ -81,6 +81,9 @@ namespace Cafeteria.Backend.Services.Impl
 
                 var usuario = await _usuarioRepositorio.ObtenerUsuarioPorCorreo(correo);
 
+                if (usuario == null)
+                    throw new Exception("Usuario no encontrado");
+
                 if (!BCrypt.Net.BCrypt.Verify(clave, usuario.Clave))
                 {
                     throw new Exception("Clave incorrecta");

@@ -2,8 +2,8 @@ namespace Cafeteria.Backend.Dtos
 {
     public class LoginDto
     {
-        public string Correo { get; set; }
+        public required string Correo { get; set; }
 
-        public string Clave { get; set; }
+        public required string Clave { get; set; }
     }
 }

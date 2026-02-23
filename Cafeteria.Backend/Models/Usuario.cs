@@ -4,18 +4,18 @@
     {
         public int Id { get; set; }
 
-        public string Nombre { get; set; }
+        public required string Nombre { get; set; }
 
-        public string Apellido { get; set; }
+        public required string Apellido { get; set; }
 
-        public string Correo { get; set; }
+        public required string Correo { get; set; }
 
-        public string Clave { get; set; }
+        public required string Clave { get; set; }
 
         public bool EsActivo { get; set; }
 
         public int RolId { get; set; }
 
-        public Rol Rol { get; set; }
+        public Rol? Rol { get; set; }
     }
 }

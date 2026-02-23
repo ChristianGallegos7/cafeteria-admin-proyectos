@@ -6,7 +6,6 @@ namespace Cafeteria.Backend.Services.Impl
 {
     public class ProductoServiceImpl : IProductoService
     {
-
         private readonly IProductosRepositorio _productoRepositorio;
 
         public ProductoServiceImpl(IProductosRepositorio productosRepositorio)
@@ -14,133 +13,92 @@ namespace Cafeteria.Backend.Services.Impl
             _productoRepositorio = productosRepositorio;
         }
 
-        public async Task<ProductoDto> ActualizarProducto(int id, ProductoDto dto)
+        public async Task<ProductoDto?> ActualizarProducto(int id, ProductoDto dto)
         {
-            try
+            var producto = new Producto
             {
-                var productoExistente = await _productoRepositorio.ObtenerProductoPorId(id);
+                Nombre = dto.Nombre,
+                Descripcion = dto.Descripcion,
+                Precio = dto.Precio,
+                ImagenUrl = dto.ImagenUrl,
+                EsActivo = dto.EsActivo,
+                EsDestacado = dto.EsDestacado,
+                TiempoPreparacion = dto.TiempoPreparacion,
+                CategoriaId = dto.CategoriaId
+            };
 
-                var producto = new Producto
-                {
-                    Nombre = dto.Nombre,
-                    Descripcion = dto.Descripcion,
-                    Precio = dto.Precio,
-                    ImagenUrl = dto.ImagenUrl,
-                    EsActivo = dto.EsActivo,
-                    EsDestacado = dto.EsDestacado,
-                    TiempoPreparacion = dto.TiempoPreparacion,
-                    CategoriaId = dto.CategoriaId
+            var productoActualizado = await _productoRepositorio.ActualizarProducto(id, producto);
 
-                };
+            if (productoActualizado == null)
+                return null;
 
-                await _productoRepositorio.ActualizarProducto(id, producto);
-
-                return new ProductoDto
-                {
-                    Id = id,
-                    Nombre = producto.Nombre,
-                    Descripcion = producto.Descripcion,
-                    Precio = producto.Precio,
-                    ImagenUrl = producto.ImagenUrl,
-                    EsActivo = producto.EsActivo,
-                    EsDestacado = producto.EsDestacado,
-                    TiempoPreparacion = producto.TiempoPreparacion,
-                    CategoriaId = producto.CategoriaId
-                };
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return MapToDto(productoActualizado);
         }
 
-        public async Task<ProductoDto> CrearProducto(ProductoDto dto)
+        public async Task<ProductoDto?> CrearProducto(ProductoDto dto)
         {
-            try
+            var producto = new Producto
             {
-                var producto = new Producto
-                {
-                    Nombre = dto.Nombre,
-                    Descripcion = dto.Descripcion,
-                    Precio = dto.Precio,
-                    ImagenUrl = dto.ImagenUrl,
-                    EsActivo = dto.EsActivo,
-                    EsDestacado = dto.EsDestacado,
-                    TiempoPreparacion = dto.TiempoPreparacion,
-                    CategoriaId = dto.CategoriaId
-                };
+                Nombre = dto.Nombre,
+                Descripcion = dto.Descripcion,
+                Precio = dto.Precio,
+                ImagenUrl = dto.ImagenUrl,
+                EsActivo = dto.EsActivo,
+                EsDestacado = dto.EsDestacado,
+                TiempoPreparacion = dto.TiempoPreparacion,
+                CategoriaId = dto.CategoriaId
+            };
 
-                var productoCreado = await _productoRepositorio.CrearProducto(producto);
+            var productoCreado = await _productoRepositorio.CrearProducto(producto);
 
-                return new ProductoDto
-                {
-                    Id = productoCreado.Id,
-                    Nombre = productoCreado.Nombre,
-                    Descripcion = productoCreado.Descripcion,
-                    Precio = productoCreado.Precio,
-                    ImagenUrl = productoCreado.ImagenUrl,
-                    EsActivo = productoCreado.EsActivo,
-                    EsDestacado = productoCreado.EsDestacado,
-                    TiempoPreparacion = productoCreado.TiempoPreparacion,
-                    CategoriaId = productoCreado.CategoriaId
-                };
-            }
+            if (productoCreado == null)
+                return null;
 
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return MapToDto(productoCreado);
         }
 
         public async Task<bool> EliminarProducto(int id)
         {
-            try
-            {
-                return await _productoRepositorio.EliminarProducto(id);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return await _productoRepositorio.EliminarProducto(id);
         }
 
-        public async Task<ProductoDto> ObtenerProductoPorId(int id)
+        public async Task<ProductoDto?> ObtenerProductoPorId(int id)
         {
-            try
-            {
-                 var producto = await _productoRepositorio.ObtenerProductoPorId(id);
-            
-                return new ProductoDto
-                {
-                    Id = producto.Id,
-                    Nombre = producto.Nombre,
-                    Descripcion = producto.Descripcion,
-                    Precio = producto.Precio,
-                    ImagenUrl = producto.ImagenUrl,
-                    EsActivo = producto.EsActivo,
-                    EsDestacado = producto.EsDestacado,
-                    TiempoPreparacion = producto.TiempoPreparacion,
-                    CategoriaId = producto.CategoriaId
-                };
-            }
-            catch (Exception)
-            {
+            var producto = await _productoRepositorio.ObtenerProductoPorId(id);
 
-                throw;
-            }
+            if (producto == null)
+                return null;
+
+            return MapToDto(producto);
         }
 
-        public Task<IEnumerable<ProductoDto>> ObtenerProductos()
+        public async Task<IEnumerable<ProductoDto>> ObtenerProductos()
         {
-            throw new NotImplementedException();
+            var productos = await _productoRepositorio.ObtenerProductos();
+            return productos.Select(MapToDto);
         }
 
-        public Task<IEnumerable<ProductoDto>> ObtenerProductosActivos()
+        public async Task<IEnumerable<ProductoDto>> ObtenerProductosActivos()
         {
-            throw new NotImplementedException();
+            var productos = await _productoRepositorio.ObtenerProductosActivos();
+            return productos.Select(MapToDto);
+        }
+
+        private static ProductoDto MapToDto(Producto p)
+        {
+            return new ProductoDto
+            {
+                Id = p.Id,
+                Nombre = p.Nombre,
+                Descripcion = p.Descripcion,
+                Precio = p.Precio,
+                ImagenUrl = p.ImagenUrl,
+                EsActivo = p.EsActivo,
+                EsDestacado = p.EsDestacado,
+                TiempoPreparacion = p.TiempoPreparacion,
+                CategoriaId = p.CategoriaId,
+                NombreCategoria = p.Categoria?.Nombre
+            };
         }
     }
 }

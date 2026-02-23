@@ -14,7 +14,7 @@ namespace Cafeteria.Backend.Repositorios.Impl
             _context = context;
         }
 
-        public async Task<Producto> ActualizarProducto(int id, Producto producto)
+        public async Task<Producto?> ActualizarProducto(int id, Producto producto)
         {
             var productoDb = await _context.Productos.FindAsync(id);
 
@@ -37,7 +37,7 @@ namespace Cafeteria.Backend.Repositorios.Impl
             return productoDb;
         }
 
-        public async Task<Producto> CrearProducto(Producto producto)
+        public async Task<Producto?> CrearProducto(Producto producto)
         {
             await _context.Productos.AddAsync(producto);
             var resultado = await _context.SaveChangesAsync();
@@ -63,19 +63,26 @@ namespace Cafeteria.Backend.Repositorios.Impl
             return resultado > 0;
         }
 
-        public async Task<Producto> ObtenerProductoPorId(int id)
+        public async Task<Producto?> ObtenerProductoPorId(int id)
         {
-           return await _context.Productos.FindAsync(id);
+            return await _context.Productos
+                .Include(p => p.Categoria)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<IEnumerable<Producto>> ObtenerProductos()
         {
-            return await _context.Productos.ToListAsync();
+            return await _context.Productos
+                .Include(p => p.Categoria)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Producto>> ObtenerProductosActivos()
         {
-            return await _context.Productos.Where(p => p.EsActivo).ToListAsync();
+            return await _context.Productos
+                .Include(p => p.Categoria)
+                .Where(p => p.EsActivo)
+                .ToListAsync();
         }
     }
 }

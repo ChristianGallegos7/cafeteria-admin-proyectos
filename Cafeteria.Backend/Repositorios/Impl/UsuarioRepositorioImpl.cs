@@ -13,28 +13,29 @@ namespace Cafeteria.Backend.Repositorios.Impl
             _context = context;
         }
 
-        public async Task<Usuario> CrearUsuario(Usuario usuario)
+        public async Task<Usuario?> CrearUsuario(Usuario usuario)
         {
-           await _context.Usuarios.AddAsync(usuario);
+            await _context.Usuarios.AddAsync(usuario);
             return await _context.SaveChangesAsync() > 0 ? usuario : null;
         }
 
         public async Task<bool> ExisteCorreo(string correo)
         {
-            var existe = await _context.Usuarios.AnyAsync(u => u.Correo == correo);
-            return existe;
+            return await _context.Usuarios.AnyAsync(u => u.Correo == correo);
         }
 
-        public async Task<Usuario> ObtenerUsuarioPorCorreo(string correo)
+        public async Task<Usuario?> ObtenerUsuarioPorCorreo(string correo)
         {
             return await _context.Usuarios
                 .Include(u => u.Rol)
                 .FirstOrDefaultAsync(u => u.Correo == correo);
         }
 
-        public async Task<Usuario> ObtenerUsuarioPorId(int id)
+        public async Task<Usuario?> ObtenerUsuarioPorId(int id)
         {
-            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Usuarios
+                .Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<IEnumerable<Usuario>> ObtenerUsuarios()

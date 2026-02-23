@@ -36,10 +36,14 @@ builder.Services.AddCors(options =>
 
 #region Servicios
 builder.Services.AddScoped<IUsuarioService, UsuarioServiceImpl>();
+builder.Services.AddScoped<IProductoService, ProductoServiceImpl>();
+builder.Services.AddScoped<ICategoriaService, CategoriaServiceImpl>();
 #endregion
 
 #region Repositorios
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorioImpl>();
+builder.Services.AddScoped<IProductosRepositorio, ProductoRepositorioImpl>();
+builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorioImpl>();
 #endregion
 
 #region Token
