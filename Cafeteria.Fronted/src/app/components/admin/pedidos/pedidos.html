@@ -48,21 +48,22 @@
       </div>
       <div class="flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full">
         <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-        <span class="text-sm font-medium">Conectado</span>
+        <span class="text-sm font-medium">Polling activo</span>
       </div>
     </div>
   </header>
 
   <!-- Contenido principal -->
   <main class="max-w-screen-xl mx-auto p-6">
+
     <!-- Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <!-- Pendientes -->
-      <div class="bg-white rounded-2xl p-6 shadow-md border border-amber-100">
+      <div class="bg-white rounded-2xl p-6 shadow-md border border-yellow-100">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-amber-600 text-sm">Pendientes</p>
-            <p class="text-3xl font-bold text-amber-900">0</p>
+            <p class="text-3xl font-bold text-yellow-600">{{ pendientes() }}</p>
           </div>
           <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
             <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,11 +75,11 @@
       </div>
 
       <!-- En preparacion -->
-      <div class="bg-white rounded-2xl p-6 shadow-md border border-amber-100">
+      <div class="bg-white rounded-2xl p-6 shadow-md border border-blue-100">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-amber-600 text-sm">En Preparacion</p>
-            <p class="text-3xl font-bold text-amber-900">0</p>
+            <p class="text-blue-600 text-sm">En Preparación</p>
+            <p class="text-3xl font-bold text-blue-600">{{ enPreparacion() }}</p>
           </div>
           <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
             <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
@@ -89,16 +90,15 @@
       </div>
 
       <!-- Listos -->
-      <div class="bg-white rounded-2xl p-6 shadow-md border border-amber-100">
+      <div class="bg-white rounded-2xl p-6 shadow-md border border-green-100">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-amber-600 text-sm">Listos</p>
-            <p class="text-3xl font-bold text-amber-900">0</p>
+            <p class="text-green-600 text-sm">Listos</p>
+            <p class="text-3xl font-bold text-green-600">{{ listos() }}</p>
           </div>
           <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
             <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M5 13l4 4L19 7"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
           </div>
         </div>
@@ -109,7 +109,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-amber-600 text-sm">Total Hoy</p>
-            <p class="text-3xl font-bold text-amber-900">0</p>
+            <p class="text-3xl font-bold text-amber-900">{{ totalHoy() }}</p>
           </div>
           <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
             <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,19 +122,111 @@
     </div>
 
     <!-- Lista de pedidos -->
-    <div class="bg-white rounded-2xl shadow-md border border-amber-100 overflow-hidden">
-      <div class="p-6 border-b border-amber-100">
-        <h2 class="text-xl font-bold text-amber-900">Pedidos Activos</h2>
-      </div>
+    <div class="space-y-4">
+      <h2 class="text-xl font-bold text-amber-900">Pedidos del Día</h2>
 
-      <!-- Empty state -->
-      <div class="p-12 text-center">
-        <svg class="w-24 h-24 text-amber-200 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M2 21V19H20V21H2ZM20 8V5H22V8C22 9.1 21.1 10 20 10V8ZM18 8H4V13C4 14.66 5.34 16 7 16H15C16.66 16 18 14.66 18 13V8ZM20 3H2V7H20V3Z"/>
-        </svg>
-        <h3 class="text-xl font-semibold text-amber-800 mb-2">No hay pedidos activos</h3>
-        <p class="text-amber-600">Los pedidos de los kioskos apareceran aqui</p>
-      </div>
+      @if (cargando()) {
+        <div class="flex justify-center py-16">
+          <svg class="w-10 h-10 text-amber-500 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+          </svg>
+        </div>
+      } @else if (pedidos().length === 0) {
+        <div class="bg-white rounded-2xl shadow-md border border-amber-100 p-12 text-center">
+          <svg class="w-24 h-24 text-amber-200 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M2 21V19H20V21H2ZM20 8V5H22V8C22 9.1 21.1 10 20 10V8ZM18 8H4V13C4 14.66 5.34 16 7 16H15C16.66 16 18 14.66 18 13V8ZM20 3H2V7H20V3Z"/>
+          </svg>
+          <h3 class="text-xl font-semibold text-amber-800 mb-2">No hay pedidos hoy</h3>
+          <p class="text-amber-600">Los pedidos de los kioskos aparecerán aquí</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          @for (pedido of pedidos(); track pedido.id) {
+            <div class="bg-white rounded-2xl shadow-md border overflow-hidden"
+              [class]="pedido.estado === 'Pendiente' ? 'border-yellow-200' :
+                       pedido.estado === 'EnPreparacion' ? 'border-blue-200' :
+                       pedido.estado === 'Listo' ? 'border-green-200' : 'border-gray-200'">
+
+              <!-- Header de la card -->
+              <div class="px-5 py-4 flex items-center justify-between"
+                [class]="pedido.estado === 'Pendiente' ? 'bg-yellow-50' :
+                         pedido.estado === 'EnPreparacion' ? 'bg-blue-50' :
+                         pedido.estado === 'Listo' ? 'bg-green-50' : 'bg-gray-50'">
+                <div>
+                  <p class="font-mono font-bold text-sm text-gray-800">{{ pedido.numeroPedido }}</p>
+                  <p class="text-xs text-gray-500 mt-0.5">{{ formatearHora(pedido.fechaCreacion) }}</p>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                  <!-- Estado badge -->
+                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
+                    [class]="pedido.estado === 'Pendiente' ? 'bg-yellow-200 text-yellow-800' :
+                             pedido.estado === 'EnPreparacion' ? 'bg-blue-200 text-blue-800' :
+                             pedido.estado === 'Listo' ? 'bg-green-200 text-green-800' : 'bg-gray-200 text-gray-700'">
+                    {{ estadoLabel(pedido.estado) }}
+                  </span>
+                  <!-- Tipo badge -->
+                  <span class="px-2 py-0.5 rounded-full text-xs font-medium"
+                    [class]="pedido.tipoPedido === 'aqui' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600'">
+                    {{ pedido.tipoPedido === 'aqui' ? 'Aquí' : 'Llevar' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Items del pedido -->
+              <div class="px-5 py-3 space-y-1 border-b border-gray-100">
+                @for (item of pedido.items; track item.productoId) {
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-700">{{ item.cantidad }}x {{ item.nombreProducto }}</span>
+                    <span class="text-gray-500">${{ item.subtotal.toFixed(2) }}</span>
+                  </div>
+                }
+              </div>
+
+              <!-- Total y acciones -->
+              <div class="px-5 py-4 flex items-center justify-between">
+                <span class="font-bold text-amber-900 text-lg">${{ pedido.total.toFixed(2) }}</span>
+
+                <!-- Botones de acción según estado -->
+                <div class="flex gap-2">
+                  @if (pedido.estado === 'Pendiente') {
+                    <button
+                      (click)="cambiarEstado(pedido.id, 'EnPreparacion')"
+                      class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold
+                             px-3 py-2 rounded-xl transition-colors"
+                    >
+                      Preparar
+                    </button>
+                  }
+                  @if (pedido.estado === 'EnPreparacion') {
+                    <button
+                      (click)="cambiarEstado(pedido.id, 'Listo')"
+                      class="bg-green-600 hover:bg-green-700 text-white text-xs font-semibold
+                             px-3 py-2 rounded-xl transition-colors"
+                    >
+                      Listo
+                    </button>
+                  }
+                  @if (pedido.estado === 'Listo') {
+                    <button
+                      (click)="cambiarEstado(pedido.id, 'Entregado')"
+                      class="bg-gray-600 hover:bg-gray-700 text-white text-xs font-semibold
+                             px-3 py-2 rounded-xl transition-colors"
+                    >
+                      Entregado
+                    </button>
+                  }
+                  @if (pedido.estado === 'Entregado') {
+                    <span class="text-gray-400 text-xs font-medium py-2">Completado</span>
+                  }
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+      }
     </div>
+
   </main>
 </div>

@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(if not exist \"C:\\\\Users\\\\chris\\\\.claude\" mkdir \"C:\\\\Users\\\\chris\\\\.claude\")"
+      "Bash(if not exist \"C:\\\\Users\\\\chris\\\\.claude\" mkdir \"C:\\\\Users\\\\chris\\\\.claude\")",
+      "Bash(cd /c/Users/chris/OneDrive/Escritorio/Proyectos/cafeteria-admin-proyectos/Cafeteria.Fronted && npx tsc --noEmit 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\chris\\\\OneDrive\\\\Escritorio\\\\Proyectos\\\\cafeteria-admin-proyectos\\\\Cafeteria.Backend\" && dotnet ef migrations add AgregarPedidos 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\chris\\\\OneDrive\\\\Escritorio\\\\Proyectos\\\\cafeteria-admin-proyectos\\\\Cafeteria.Backend\" && dotnet ef database update 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\chris\\\\OneDrive\\\\Escritorio\\\\Proyectos\\\\cafeteria-admin-proyectos\\\\Cafeteria.Fronted\" && npm install qrcode && npm install --save-dev @types/qrcode 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\chris\\\\OneDrive\\\\Escritorio\\\\Proyectos\\\\cafeteria-admin-proyectos\\\\Cafeteria.Fronted\" && npx tsc --noEmit 2>&1)",
+      "Bash(tail:*)"
     ]
   }
 }

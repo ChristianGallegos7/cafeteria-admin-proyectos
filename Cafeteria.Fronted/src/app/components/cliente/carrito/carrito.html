@@ -1,0 +1,206 @@
+@if (carritoService.abierto() || pedidoConfirmado()) {
+  <!-- Overlay -->
+  <div
+    class="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
+    (click)="!pedidoConfirmado() && carritoService.cerrarCarrito()"
+  ></div>
+
+  <!-- Drawer -->
+  <aside class="fixed right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl z-50 flex flex-col">
+
+    @if (pedidoConfirmado(); as pedido) {
+
+      <!-- ===== VISTA TICKET ===== -->
+      <div class="bg-gradient-to-r from-green-700 to-green-600 px-6 py-5 flex items-center gap-3">
+        <svg class="w-7 h-7 text-green-100 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <div>
+          <h2 class="text-xl font-bold text-white">¡Pedido confirmado!</h2>
+          <p class="text-green-200 text-sm">Guarda tu QR para recoger tu pedido</p>
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-y-auto px-5 py-5 space-y-5">
+
+        <!-- Número de pedido -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center">
+          <p class="text-amber-600 text-sm font-medium mb-1">Número de pedido</p>
+          <p class="text-amber-900 font-mono font-bold text-lg tracking-wide">{{ pedido.numeroPedido }}</p>
+          <span class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold"
+            [class]="pedido.tipoPedido === 'aqui' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'">
+            {{ pedido.tipoPedido === 'aqui' ? '🪑 Para comer aquí' : '🥡 Para llevar' }}
+          </span>
+        </div>
+
+        <!-- QR Code -->
+        <div class="flex flex-col items-center gap-2">
+          <p class="text-amber-700 text-sm font-medium">Escanea tu ticket</p>
+          <div class="bg-white border-2 border-amber-200 rounded-2xl p-3 shadow-md">
+            <img [src]="qrDataUrl()" alt="QR del pedido" class="w-52 h-52"/>
+          </div>
+          <p class="text-amber-500 text-xs text-center">Muestra este QR al recoger tu pedido</p>
+        </div>
+
+        <!-- Resumen de items -->
+        <div class="space-y-2">
+          <p class="text-amber-800 font-semibold text-sm">Resumen</p>
+          @for (item of pedido.items; track item.productoId) {
+            <div class="flex justify-between items-center text-sm py-1 border-b border-amber-100">
+              <span class="text-amber-800">{{ item.cantidad }}x {{ item.nombreProducto }}</span>
+              <span class="text-amber-700 font-medium">${{ item.subtotal.toFixed(2) }}</span>
+            </div>
+          }
+          <div class="flex justify-between items-center pt-2">
+            <span class="text-amber-900 font-bold">Total</span>
+            <span class="text-amber-900 font-bold text-lg">${{ pedido.total.toFixed(2) }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer ticket -->
+      <div class="border-t border-amber-100 px-6 py-5">
+        <button
+          (click)="nuevoPedido()"
+          class="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-4 px-6
+                 rounded-2xl transition-colors duration-200 flex items-center justify-center gap-2
+                 text-lg shadow-lg shadow-amber-900/20"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          Nuevo pedido
+        </button>
+      </div>
+
+    } @else {
+
+      <!-- ===== VISTA CARRITO ===== -->
+      <div class="bg-gradient-to-r from-amber-900 to-amber-800 px-6 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <h2 class="text-xl font-bold text-white">Tu pedido</h2>
+          @if (carritoService.totalItems() > 0) {
+            <span class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+              {{ carritoService.totalItems() }}
+            </span>
+          }
+        </div>
+        <button
+          (click)="carritoService.cerrarCarrito()"
+          class="text-amber-300 hover:text-white transition-colors p-1"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Items -->
+      <div class="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+
+        @if (carritoService.items().length === 0) {
+          <div class="flex flex-col items-center justify-center h-full text-center py-16">
+            <svg class="w-20 h-20 text-amber-200 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <p class="text-amber-800 font-semibold text-lg">Tu carrito está vacío</p>
+            <p class="text-amber-500 text-sm mt-1">Agrega productos del menú</p>
+          </div>
+        }
+
+        @for (item of carritoService.items(); track item.productoId) {
+          <div class="flex items-center gap-3 bg-amber-50 rounded-2xl p-3 border border-amber-100">
+
+            <!-- Imagen -->
+            <div class="w-16 h-16 rounded-xl overflow-hidden bg-amber-200 flex-shrink-0">
+              @if (item.imagenUrl) {
+                <img [src]="item.imagenUrl" [alt]="item.nombre" class="w-full h-full object-cover"/>
+              } @else {
+                <div class="w-full h-full flex items-center justify-center">
+                  <svg class="w-8 h-8 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M2 21V19H20V21H2ZM20 8V5H22V8C22 9.1 21.1 10 20 10V8ZM18 8H4V13C4 14.66 5.34 16 7 16H15C16.66 16 18 14.66 18 13V8ZM20 3H2V7H20V3Z"/>
+                  </svg>
+                </div>
+              }
+            </div>
+
+            <!-- Info -->
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-amber-900 text-sm truncate">{{ item.nombre }}</p>
+              <p class="text-amber-600 text-sm font-medium">${{ item.precio | number:'1.2-2' }}</p>
+            </div>
+
+            <!-- Controles cantidad -->
+            <div class="flex items-center gap-1 flex-shrink-0">
+              <button
+                (click)="carritoService.disminuir(item.productoId)"
+                class="w-7 h-7 rounded-full bg-amber-200 hover:bg-amber-300 text-amber-800
+                       flex items-center justify-center transition-colors font-bold text-sm"
+              >−</button>
+
+              <span class="w-6 text-center font-bold text-amber-900 text-sm">{{ item.cantidad }}</span>
+
+              <button
+                (click)="carritoService.aumentar(item.productoId)"
+                class="w-7 h-7 rounded-full bg-amber-800 hover:bg-amber-900 text-white
+                       flex items-center justify-center transition-colors font-bold text-sm"
+              >+</button>
+            </div>
+
+            <!-- Quitar -->
+            <button
+              (click)="carritoService.quitar(item.productoId)"
+              class="text-red-400 hover:text-red-600 transition-colors flex-shrink-0 p-1"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- Footer con total y botón -->
+      @if (carritoService.items().length > 0) {
+        <div class="border-t border-amber-100 px-6 py-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-amber-700 font-medium">Total</span>
+            <span class="text-2xl font-bold text-amber-900">
+              ${{ carritoService.totalPrecio() | number:'1.2-2' }}
+            </span>
+          </div>
+
+          <button
+            (click)="confirmarPedido()"
+            [disabled]="enviando()"
+            class="w-full bg-amber-800 hover:bg-amber-900 disabled:opacity-60 disabled:cursor-not-allowed
+                   text-white font-bold py-4 px-6 rounded-2xl transition-colors duration-200
+                   flex items-center justify-center gap-2 text-lg shadow-lg shadow-amber-900/20"
+          >
+            @if (enviando()) {
+              <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+              </svg>
+              Enviando...
+            } @else {
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Confirmar pedido
+            }
+          </button>
+        </div>
+      }
+
+    }
+  </aside>
+}

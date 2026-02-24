@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LoginResponseDto } from '../../../../interfaces/login.interface';
+import { CarritoService } from '../../../../services/carrito.service';
 import { PedidoService, TipoPedido } from '../../../../services/pedido.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class Navbar implements OnInit, OnDestroy {
   tipoPedido: TipoPedido = null;
   usuarioKiosko: LoginResponseDto | null = null;
 
+  readonly carritoService = inject(CarritoService);
   private readonly pedidoService = inject(PedidoService);
   private subscription?: Subscription;
 

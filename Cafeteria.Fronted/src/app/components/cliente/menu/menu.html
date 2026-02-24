@@ -145,6 +145,7 @@
 
             <!-- Boton Agregar -->
             <button
+              (click)="agregarAlCarrito(producto)"
               class="w-full mt-4 bg-amber-800 hover:bg-amber-900 text-white font-semibold
                      py-3 px-4 rounded-xl transition-colors duration-200
                      flex items-center justify-center gap-2"
@@ -181,3 +182,5 @@
     }
   </main>
 </div>
+
+<app-carrito />

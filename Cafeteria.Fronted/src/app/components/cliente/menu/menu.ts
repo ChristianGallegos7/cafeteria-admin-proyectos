@@ -1,13 +1,15 @@
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Producto } from '../../../interfaces/productos.interface';
+import { CarritoService } from '../../../services/carrito.service';
 import { PedidoService, TipoPedido } from '../../../services/pedido.service';
 import { ProductosService } from '../../../services/productos-service';
+import { Carrito } from '../carrito/carrito';
 import { Navbar } from '../shared/navbar/navbar';
 
 @Component({
   selector: 'app-menu',
-  imports: [Navbar],
+  imports: [Navbar, Carrito],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
@@ -19,6 +21,7 @@ export class Menu implements OnInit, OnDestroy {
 
   private readonly productosService = inject(ProductosService);
   private readonly pedidoService = inject(PedidoService);
+  readonly carritoService = inject(CarritoService);
   private readonly cdr = inject(ChangeDetectorRef);
   private subscription?: Subscription;
 
@@ -54,5 +57,13 @@ export class Menu implements OnInit, OnDestroy {
 
   seleccionarTipoPedido(tipo: 'aqui' | 'llevar'): void {
     this.pedidoService.seleccionarTipoPedido(tipo);
+  }
+
+  agregarAlCarrito(producto: Producto): void {
+    const eraVacio = this.carritoService.totalItems() === 0;
+    this.carritoService.agregar(producto);
+    if (eraVacio) {
+      this.carritoService.abrirCarrito();
+    }
   }
 }
